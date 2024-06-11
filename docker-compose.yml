@@ -1,0 +1,13 @@
+services:
+  pocketbase:
+    build: .
+    container_name: pocketbase
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY:-4yXEsvw66m98RqKSPQKJWYoe4juKGWZM}
+    volumes:
+      - ./pb/data:/pb/pb_data
+      - ./pb/hooks:/pb/pb_hooks
+      - ./pb/migrations:/pb/pb_migrations
