@@ -1,0 +1,51 @@
+volumes:
+  minio:
+  mailpit:
+
+services:
+  pocketbase:
+    build: .
+    container_name: pocketbase
+    restart: unless-stopped
+    entrypoint: /development/start.sh
+    ports:
+      - "8080:8080"
+    environment:
+      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY:-4yXEsvw66m98RqKSPQKJWYoe4juKGWZM}
+    volumes:
+      - ./pb/data:/pb/pb_data
+      - ./pb/hooks:/pb/pb_hooks
+      - ./pb/migrations:/pb/pb_migrations
+      - ./dev:/development
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit:/data
+      - ./dev:/development
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: true
+      MP_SMTP_AUTH_ALLOW_INSECURE: true
+      MP_SMTP_TLS_KEY: /development/key.pem
+      MP_SMTP_TLS_CERT: /development/cert.pem
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=pocketbase
+      - MINIO_ROOT_PASSWORD=pocketbase
+    volumes:
+      - minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
