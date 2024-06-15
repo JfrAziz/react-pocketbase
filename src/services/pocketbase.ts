@@ -9,11 +9,11 @@ interface PB extends PocketBase {
 /**
  * use this for standard pocketbase
  */
-const pb = new PocketBase(import.meta.env.PB_URL || "/") as PB;
+const pb = new PocketBase(import.meta.env.VITE_PB_URL || "/") as PB;
 
 /**
  * use this for typesafety
  */
-const db = new TypedPocketBase<Schema>(import.meta.env.PB_URL || "/");
+const db = new TypedPocketBase<Schema>(import.meta.env.VITE_PB_URL || "/");
 
 export { pb, db };

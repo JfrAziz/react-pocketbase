@@ -19,12 +19,19 @@
       "**/build/**",
       "**/dist/**",
       "**/coverage/**",
-      "**/pb/**"
+      "**/pb/**",
+      "./src/route-tree.gen.ts"
     ]
   },
   "linter": {
     "enabled": true,
-    "ignore": ["**/build/**", "**/dist/**", "**/coverage/**", "**/pb/**"],
+    "ignore": [
+      "**/build/**",
+      "**/dist/**",
+      "**/coverage/**",
+      "**/pb/**",
+      "./src/route-tree.gen.ts"
+    ],
     "rules": {
       "recommended": false,
       "complexity": {

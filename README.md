@@ -34,7 +34,7 @@ openssl req -x509 -newkey rsa:4096 -nodes -keyout ./dev/key.pem -out ./dev/cert.
 
 ## Step 2: SMTP and MinIO Config
 
-after you run all the services defined in the [`docker-compose-full.yml`](./docker-compose-full.yml) file, `docker-compose -f docker-compose-full.yml up -d`. check all services already running:
+after you run all the services defined in the [`docker-compose-full.yml`](./docker-compose-full.yml) file, `docker compose -f docker-compose-full.yml up -d`. check all services already running:
 
 - pocketbase: [localhost:8080/_/](http://localhost:8080/_/)
 - MinIO Console: [localhost:9001](http://localhost:9001) *you need to setup new bucket and access key*

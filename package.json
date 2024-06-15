@@ -8,9 +8,12 @@
     "build": "tsc && vite build",
     "lint": "biome check --verbose --write .",
     "preview": "vite preview",
-    "pb:codegen": "dotenv -- cross-env-shell 'typed-pocketbase --url $PB_URL  --email $PB_EMAIL --password $PB_PASSWORD -o ./src/services/database.d.ts'"
+    "pb:codegen": "dotenv -- cross-env-shell 'typed-pocketbase --url $VITE_PB_URL  --email $PB_EMAIL --password $PB_PASSWORD -o ./src/services/database.d.ts'"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@tanstack/react-router": "^1.36.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.394.0",
@@ -23,6 +26,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.1",
+    "@tanstack/router-devtools": "^1.36.3",
+    "@tanstack/router-vite-plugin": "^1.38.0",
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
