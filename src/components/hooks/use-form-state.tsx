@@ -29,15 +29,6 @@ export const useFormState = <T extends object>(params: FormParams<T>) => {
     }));
 
   /**
-   * reset error for a key
-   */
-  const resetError = (key: keyof T) =>
-    setForm((state) => ({
-      ...state,
-      errors: { ...state.errors, [key]: undefined } as FormState<T>["errors"],
-    }));
-
-  /**
    * set data value
    */
   const setValue = <X extends keyof T>(key: X, value: T[X]) =>
@@ -103,8 +94,7 @@ export const useFormState = <T extends object>(params: FormParams<T>) => {
     errors: form.errors,
     isSubmitting: form.isSubmitting,
     submit: submit,
-    setValue: setValue,
     setError: setError,
-    resetError: resetError,
+    setValue: setValue,
   };
 };

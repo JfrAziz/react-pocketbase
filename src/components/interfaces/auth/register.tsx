@@ -5,11 +5,12 @@ import { formHandler } from "@/utils/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ClientResponseError } from "pocketbase";
-import { useRouter } from "@tanstack/react-router";
+import { Separator } from "@/components/ui/separator";
+import { useRouter, Link } from "@tanstack/react-router";
 import { useFormState } from "@/components/hooks/use-form-state";
 import { FormError, FormField, FormLabel } from "@/components/ui/form";
 
-export const Register = () => {
+export const RegisterForm = () => {
   const router = useRouter();
 
   const form = useFormState({
@@ -55,9 +56,14 @@ export const Register = () => {
       pb.collection("users")
         .create(data)
         .then(() => {
-          pb.collection("users").requestVerification(data.email);
-
-          return router.navigate({ to: "/auth/email-verify" });
+          pb.collection("users")
+            .requestVerification(data.email)
+            .then(() =>
+              router.navigate({
+                to: "/auth/email-verification",
+                search: { email: data.email },
+              }),
+            );
         })
         .catch((err) => {
           if (!(err instanceof ClientResponseError))
@@ -173,6 +179,12 @@ export const Register = () => {
       <Button type="submit" className="space-x-2" disabled={form.isSubmitting}>
         {form.isSubmitting && <RotateCw className="size-4 animate-spin" />}
         <span>Register</span>
+      </Button>
+
+      <Separator />
+
+      <Button asChild type="button" variant="outline">
+        <Link to="/auth/login">Back to login</Link>
       </Button>
     </form>
   );

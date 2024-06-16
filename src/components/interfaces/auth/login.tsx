@@ -5,12 +5,13 @@ import { formHandler } from "@/utils/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ClientResponseError } from "pocketbase";
+import { Separator } from "@/components/ui/separator";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useFormState } from "@/components/hooks/use-form-state";
 import { FormError, FormField, FormLabel } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 
-export const Login = () => {
+export const LoginForm = () => {
   const router = useRouter();
 
   const form = useFormState({
@@ -33,7 +34,12 @@ export const Login = () => {
             if (err.status === 403)
               pb.collection("users")
                 .requestVerification(form.data.identity)
-                .then(() => router.navigate({ to: "/auth/email-verify" }));
+                .then(() =>
+                  router.navigate({
+                    to: "/auth/email-verification",
+                    search: { email: data.identity },
+                  }),
+                );
 
           return form.setError("identity", (err as Error).message);
         });
@@ -79,6 +85,10 @@ export const Login = () => {
         />
         <FormError>{form.errors?.password}</FormError>
       </FormField>
+
+      <Label asChild>
+        <Link to="/auth/password-reset">Forgot Password?</Link>
+      </Label>
 
       <Button type="submit" className="space-x-2" disabled={form.isSubmitting}>
         {form.isSubmitting && <RotateCw className="size-4 animate-spin" />}

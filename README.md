@@ -4,10 +4,22 @@ This project just a starter to develop pocketbase with react frontend (SPA vite)
 
 - react (typescript)
 - tailwind
+- frontend routing [(tanstack router)](https://tanstack.com/router)
 - [shadcn UI components](https://ui.shadcn.com/)
 - [pocketbase typegen](https://github.com/david-plugge/typed-pocketbase)
 - [docker support](#production)
 - [docker development](#development-with-docker) (with local SMTP and S3 support)
+
+This project already setup with custom authentication page rather than using default pocketbase, such as
+
+- `/auth/login` -> login page
+- `/auth/register` -> register page
+- `/auth/password-reset` -> password reset request page
+- `/auth/password-reset-conform?token=<token>` -> password reset page
+- `/auth/email-verification` -> request email verification page
+- `/auth/email-verification-confirm?token=<token>` -> verify email
+
+to use custom routes, we need to update pocketbase default email url. 
 
 # Development
 
