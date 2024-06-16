@@ -11,15 +11,22 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthRegisterImport } from './routes/auth.register'
-import { Route as AuthPasswordResetConfirmImport } from './routes/auth.password-reset-confirm'
-import { Route as AuthPasswordResetImport } from './routes/auth.password-reset'
-import { Route as AuthLoginImport } from './routes/auth.login'
-import { Route as AuthEmailVerificationConfirmImport } from './routes/auth.email-verification-confirm'
-import { Route as AuthEmailVerificationImport } from './routes/auth.email-verification'
+import { Route as AuthRegisterImport } from './routes/auth/register'
+import { Route as AuthPasswordResetConfirmImport } from './routes/auth/password-reset-confirm'
+import { Route as AuthPasswordResetImport } from './routes/auth/password-reset'
+import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AuthEmailVerificationConfirmImport } from './routes/auth/email-verification-confirm'
+import { Route as AuthEmailVerificationImport } from './routes/auth/email-verification'
+import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
 
 // Create/Update Routes
+
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
@@ -57,6 +64,11 @@ const AuthEmailVerificationRoute = AuthEmailVerificationImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -67,6 +79,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardImport
+      parentRoute: typeof AuthenticatedImport
     }
     '/auth/email-verification': {
       id: '/auth/email-verification'
@@ -117,6 +143,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  AuthenticatedRoute: AuthenticatedRoute.addChildren({
+    AuthenticatedDashboardRoute,
+  }),
   AuthEmailVerificationRoute,
   AuthEmailVerificationConfirmRoute,
   AuthLoginRoute,
@@ -134,6 +163,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated",
         "/auth/email-verification",
         "/auth/email-verification-confirm",
         "/auth/login",
@@ -145,23 +175,33 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/dashboard"
+      ]
+    },
+    "/_authenticated/dashboard": {
+      "filePath": "_authenticated/dashboard.tsx",
+      "parent": "/_authenticated"
+    },
     "/auth/email-verification": {
-      "filePath": "auth.email-verification.tsx"
+      "filePath": "auth/email-verification.tsx"
     },
     "/auth/email-verification-confirm": {
-      "filePath": "auth.email-verification-confirm.tsx"
+      "filePath": "auth/email-verification-confirm.tsx"
     },
     "/auth/login": {
-      "filePath": "auth.login.tsx"
+      "filePath": "auth/login.tsx"
     },
     "/auth/password-reset": {
-      "filePath": "auth.password-reset.tsx"
+      "filePath": "auth/password-reset.tsx"
     },
     "/auth/password-reset-confirm": {
-      "filePath": "auth.password-reset-confirm.tsx"
+      "filePath": "auth/password-reset-confirm.tsx"
     },
     "/auth/register": {
-      "filePath": "auth.register.tsx"
+      "filePath": "auth/register.tsx"
     }
   }
 }

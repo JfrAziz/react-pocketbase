@@ -1,13 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import {
-  PasswordResetConfirm,
-} from "@/components/interfaces/auth/password-reset";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { PasswordResetAttempt } from "@/components/interfaces/auth/password-reset";
 
 export const Route = createFileRoute("/auth/password-reset-confirm")({
   component: ResetPassword,
   validateSearch: (search): { token?: string } => ({
     token: search.token?.toString(),
   }),
+  beforeLoad: ({ context }) => {
+    if (context.isAuthenticated) throw redirect({ to: "/" });
+  },
 });
 
 function ResetPassword() {
@@ -16,7 +17,7 @@ function ResetPassword() {
   return (
     <div className="flex h-svh w-full items-center justify-center">
       <div className="max-w-sm flex-1">
-        <PasswordResetConfirm token={search.token} />
+        <PasswordResetAttempt token={search.token} />
       </div>
     </div>
   );

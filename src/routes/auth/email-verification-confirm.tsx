@@ -1,12 +1,15 @@
-import { VerificationAttempt } from '@/components/interfaces/auth/email-verify';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { VerificationAttempt } from "@/components/interfaces/auth/email-verifications";
 
-export const Route = createFileRoute('/auth/email-verification-confirm')({
+export const Route = createFileRoute("/auth/email-verification-confirm")({
   component: VerifyEmail,
   validateSearch: (search): { token?: string } => ({
     token: search.token?.toString(),
-  })
-})
+  }),
+  beforeLoad: ({ context }) => {
+    if (context.isAuthenticated) throw redirect({ to: "/" });
+  },
+});
 
 function VerifyEmail() {
   const router = Route.useSearch();

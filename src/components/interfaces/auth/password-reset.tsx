@@ -6,9 +6,13 @@ import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { BadgeAlert, BadgeCheck, RotateCw } from "lucide-react";
 import { useFormState } from "@/components/hooks/use-form-state";
 import { FormError, FormField, FormLabel } from "@/components/ui/form";
+import {
+  IconLoader2,
+  IconCircleCheck,
+  IconExclamationCircle,
+} from "@tabler/icons-react";
 
 export const PasswordResetRequest = () => {
   const [requestSend, setRequestSend] = useState(false);
@@ -69,7 +73,9 @@ export const PasswordResetRequest = () => {
             className="space-x-2"
             disabled={form.isSubmitting}
           >
-            {form.isSubmitting && <RotateCw className="size-4 animate-spin" />}
+            {form.isSubmitting && (
+              <IconLoader2 className="size-4 animate-spin" />
+            )}
             <span>Reset Password</span>
           </Button>
         </form>
@@ -90,7 +96,7 @@ export const PasswordResetRequest = () => {
   );
 };
 
-export const PasswordResetConfirm: FC<{ token?: string }> = ({ token }) => {
+export const PasswordResetAttempt: FC<{ token?: string }> = ({ token }) => {
   const [passwordReseted, setPasswordReseted] = useState(false);
 
   const form = useFormState({
@@ -174,7 +180,9 @@ export const PasswordResetConfirm: FC<{ token?: string }> = ({ token }) => {
             className="space-x-2"
             disabled={form.isSubmitting}
           >
-            {form.isSubmitting && <RotateCw className="size-4 animate-spin" />}
+            {form.isSubmitting && (
+              <IconLoader2 className="size-4 animate-spin" />
+            )}
             <span>Reset Password</span>
           </Button>
         </form>
@@ -182,7 +190,7 @@ export const PasswordResetConfirm: FC<{ token?: string }> = ({ token }) => {
 
       {token && passwordReseted && (
         <div className="flex flex-col items-center gap-4">
-          <BadgeCheck className="size-20 stroke-1 text-center" />
+          <IconCircleCheck className="size-20 stroke-1 text-center" />
           <p className="text-center text-sm">
             Your password has been successfully reseted!. You can now login with
             your new password to your account.
@@ -192,7 +200,7 @@ export const PasswordResetConfirm: FC<{ token?: string }> = ({ token }) => {
 
       {!token && (
         <div className="flex flex-col items-center gap-4">
-          <BadgeAlert className="size-20 stroke-1 text-center" />
+          <IconExclamationCircle className="size-20 stroke-1 text-center" />
           <p className="text-center text-sm">
             The password reset link is invalid or has expired. Please request a
             new password reset link.

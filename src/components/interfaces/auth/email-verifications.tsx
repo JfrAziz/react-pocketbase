@@ -2,9 +2,9 @@ import { pb } from "@/services/pocketbase";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { FC, useEffect, useState } from "react";
-import { BadgeAlert, BadgeCheck } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useCountDown } from "@/components/hooks/use-countdown";
+import { IconCircleCheck, IconExclamationCircle } from "@tabler/icons-react";
 
 const VerificationRequest: FC<{ email: string }> = ({ email }) => {
   const [canRequestLink, setCanRequestLink] = useState(false);
@@ -45,7 +45,7 @@ const VerificationRequest: FC<{ email: string }> = ({ email }) => {
 
 export const VerificationOnboarding: FC<{ email?: string }> = ({ email }) => (
   <div className="m-auto flex flex-col items-center gap-3 p-2">
-    <BadgeCheck className="size-20 stroke-1 text-center" />
+    <IconCircleCheck className="size-20 stroke-1 text-center" />
 
     <p className="text-sm">
       Please check your email inbox. We have sent a verification link to your
@@ -77,7 +77,7 @@ export const VerificationAttempt: FC<{ token?: string }> = ({ token }) => {
     <div className="flex flex-col gap-4">
       {isValid && (
         <div className="flex flex-col items-center gap-4">
-          <BadgeCheck className="size-20 stroke-1 text-center" />
+          <IconCircleCheck className="size-20 stroke-1 text-center" />
           <p className="text-center text-sm">
             Your email address has been successfully verified!. You can now
             access all the features of your account.
@@ -86,7 +86,7 @@ export const VerificationAttempt: FC<{ token?: string }> = ({ token }) => {
       )}
       {isValid === false && (
         <div className="flex flex-col items-center gap-4">
-          <BadgeAlert className="size-20 stroke-1 text-center" />
+          <IconExclamationCircle className="size-20 stroke-1 text-center" />
           <p className="text-center text-sm">
             We couldn't verify your email address. The verification link may
             have expired or been used already.
