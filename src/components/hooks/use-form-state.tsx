@@ -9,7 +9,7 @@ interface FormState<T = unknown> {
 interface FormParams<T extends object> {
   defaultValue: T;
   validations?: Partial<{
-    [K in keyof T]: (valu: T[K]) => string | undefined;
+    [K in keyof T]: (value: T[K], data: T) => string | undefined;
   }>;
 }
 
@@ -46,7 +46,7 @@ export const useFormState = <T extends object>(params: FormParams<T>) => {
       data: { ...state.data, [key]: value } as FormState<T>["data"],
       errors: {
         ...state.errors,
-        [key]: params.validations?.[key]?.(value),
+        [key]: params.validations?.[key]?.(value, form.data),
       } as FormState<T>["errors"],
     }));
 
@@ -63,7 +63,7 @@ export const useFormState = <T extends object>(params: FormParams<T>) => {
       errors = (Object.keys(params.validations) as (keyof T)[]).reduce(
         (prev, key) => ({
           ...prev,
-          [key]: params.validations?.[key]?.(form.data?.[key]),
+          [key]: params.validations?.[key]?.(form.data?.[key], form.data),
         }),
         {} as Partial<FormState<T>["errors"]>,
       ) as FormState<T>["errors"];

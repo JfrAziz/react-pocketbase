@@ -10,53 +10,66 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as IndexImport } from "./routes/index";
-import { Route as AuthLoginImport } from "./routes/auth.login";
-import { Route as AuthEmailVerifyImport } from "./routes/auth.email-verify";
+import { Route as rootRoute } from './routes/__root'
+import { Route as IndexImport } from './routes/index'
+import { Route as AuthRegisterImport } from './routes/auth.register'
+import { Route as AuthLoginImport } from './routes/auth.login'
+import { Route as AuthEmailVerifyImport } from './routes/auth.email-verify'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
-  path: "/",
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const AuthRegisterRoute = AuthRegisterImport.update({
+  path: '/auth/register',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthLoginRoute = AuthLoginImport.update({
-  path: "/auth/login",
+  path: '/auth/login',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AuthEmailVerifyRoute = AuthEmailVerifyImport.update({
-  path: "/auth/email-verify",
+  path: '/auth/email-verify',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/auth/email-verify": {
-      id: "/auth/email-verify";
-      path: "/auth/email-verify";
-      fullPath: "/auth/email-verify";
-      preLoaderRoute: typeof AuthEmailVerifyImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/auth/login": {
-      id: "/auth/login";
-      path: "/auth/login";
-      fullPath: "/auth/login";
-      preLoaderRoute: typeof AuthLoginImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/email-verify': {
+      id: '/auth/email-verify'
+      path: '/auth/email-verify'
+      fullPath: '/auth/email-verify'
+      preLoaderRoute: typeof AuthEmailVerifyImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -66,7 +79,8 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthEmailVerifyRoute,
   AuthLoginRoute,
-});
+  AuthRegisterRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -78,7 +92,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/auth/email-verify",
-        "/auth/login"
+        "/auth/login",
+        "/auth/register"
       ]
     },
     "/": {
@@ -89,6 +104,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/auth/login": {
       "filePath": "auth.login.tsx"
+    },
+    "/auth/register": {
+      "filePath": "auth.register.tsx"
     }
   }
 }

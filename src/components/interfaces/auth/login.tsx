@@ -1,10 +1,14 @@
+import { cn } from "@/utils/classnames";
+import { RotateCw } from "lucide-react";
 import { pb } from "@/services/pocketbase";
 import { formHandler } from "@/utils/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@tanstack/react-router";
+import { ClientResponseError } from "pocketbase";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useFormState } from "@/components/hooks/use-form-state";
 import { FormError, FormField, FormLabel } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
 
 export const Login = () => {
   const router = useRouter();
@@ -23,12 +27,16 @@ export const Login = () => {
     form.submit(async (data) => {
       pb.collection("users")
         .authWithPassword(data.identity, data.password)
-        .then((data) => {
-          if (data.record.verified) return router.navigate({ to: "/" });
+        .then(() => router.navigate({ to: "/" }))
+        .catch((err) => {
+          if (err instanceof ClientResponseError)
+            if (err.status === 403)
+              pb.collection("users")
+                .requestVerification(form.data.identity)
+                .then(() => router.navigate({ to: "/auth/email-verify" }));
 
-          return router.navigate({ to: "/auth/email-verify" });
-        })
-        .catch((err) => form.setError("identity", (err as Error).message));
+          return form.setError("identity", (err as Error).message);
+        });
     });
 
   return (
@@ -37,31 +45,50 @@ export const Login = () => {
       className="m-auto flex flex-col gap-3 p-2"
     >
       <FormField>
-        <FormLabel htmlFor="identity">Username or Email</FormLabel>
+        <FormLabel error={!!form.errors?.identity} htmlFor="identity">
+          Username or Email
+        </FormLabel>
         <Input
           name="identity"
           value={form.data.identity}
           disabled={form.isSubmitting}
           placeholder="email@example.com"
           onChange={(e) => form.setValue("identity", e.target.value)}
+          className={cn(
+            !!form.errors?.identity &&
+              "border-destructive focus-visible:ring-destructive",
+          )}
         />
         <FormError>{form.errors?.identity}</FormError>
       </FormField>
 
       <FormField>
-        <FormLabel htmlFor="password">Username or Email</FormLabel>
+        <FormLabel error={!!form.errors?.password} htmlFor="password">
+          Password
+        </FormLabel>
         <Input
           name="password"
           type="password"
           value={form.data.password}
           disabled={form.isSubmitting}
           onChange={(e) => form.setValue("password", e.target.value)}
+          className={cn(
+            !!form.errors?.password &&
+              "border-destructive focus-visible:ring-destructive",
+          )}
         />
         <FormError>{form.errors?.password}</FormError>
       </FormField>
 
-      <Button type="submit" disabled={form.isSubmitting}>
-        Login
+      <Button type="submit" className="space-x-2" disabled={form.isSubmitting}>
+        {form.isSubmitting && <RotateCw className="size-4 animate-spin" />}
+        <span>Login</span>
+      </Button>
+
+      <Separator />
+
+      <Button variant="outline" asChild>
+        <Link to="/auth/register">Register</Link>
       </Button>
     </form>
   );

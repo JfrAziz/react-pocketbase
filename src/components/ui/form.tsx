@@ -31,7 +31,7 @@ export const FormLabel = forwardRef<
 >(({ className, error, ...props }, ref) => (
   <Label
     ref={ref}
-    className={cn(error && "text-destructive", className)}
+    className={cn(error && "text-destructive", "text-sm", className)}
     {...props}
   />
 ));
